@@ -5,8 +5,8 @@ import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 
 export default [
-  {files: ["**/*.ts"]},
-  {languageOptions: { globals: globals.browser }},
+  { files: ["**/*.ts"] },
+  { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -14,8 +14,8 @@ export default [
       prettier: prettierPlugin,
     },
     rules: {
-      ...prettier.rules,  
-      "prettier/prettier": "error", 
+      ...prettier.rules,
+      "prettier/prettier": "error",
     },
   },
 ];
