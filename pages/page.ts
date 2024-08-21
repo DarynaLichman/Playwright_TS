@@ -1,6 +1,6 @@
-import { type Page } from "@playwright/test";
+import { Locator, type Page } from "@playwright/test";
 
-class BasePage {
+abstract class BasePage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -11,19 +11,31 @@ class BasePage {
     await this.page.goto(url);
   }
 
-  async getElement(element: string) {
+  async getElement(element: string): Promise<Locator> {
     return this.page.locator(element);
   }
 
+  async getElementByTestID(dataTestId: string): Promise<Locator> {
+    return this.page.getByTestId(dataTestId);
+  }
+
+  async getNestedElement(parent: string, child: string): Promise<Locator> {
+    return this.page.locator(parent).locator(child);
+  }
+
   async clickElement(element: string) {
-    await (await this.getElement(element)).click();
+    await (await this.getElementByTestID(element)).click();
   }
 
   async setValue(element: string, value: string, blur = false) {
     await (await this.getElement(element)).fill(value);
     if (blur) {
-      await (await this.getElement(element)).blur();
+      this.blur(element);
     }
+  }
+
+  async blur(element: string) {
+    await (await this.getElement(element)).blur();
   }
 
   async selectOption(element: string, option: string) {

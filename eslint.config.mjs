@@ -11,7 +11,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.node, // Додаємо глобальні змінні для Node.js
+        ...globals.node,
       },
       parser: tsEslintParser,
       parserOptions: {
@@ -28,6 +28,15 @@ export default [
       ...pluginJs.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       ...prettier.rules,
+      "max-len": [
+        "error",
+        {
+          code: 120,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+        },
+      ],
       "prettier/prettier": "error",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["error"],
