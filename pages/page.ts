@@ -23,8 +23,8 @@ abstract class BasePage {
     return this.page.locator(parent).locator(child);
   }
 
-  async clickElement(element: string) {
-    await (await this.getElementByTestID(element)).click();
+  async clickElement(element: Locator) {
+    await element.click();
   }
 
   async setValue(element: string, value: string, blur = false) {

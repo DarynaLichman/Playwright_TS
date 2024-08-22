@@ -1,17 +1,17 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./page";
 
-const GenderDropdownMenu = "//form/descendant::select[@data-testid='select-Gender']";
-const userNameField = "//form/descendant::input[@data-testid='input-UserName']";
-const yearOfBirthField = "//form/descendant::input[@data-testid='input-YearOfBirth']";
-const createBtn = "button-Create";
-const cancelBtn = "button-Cancel";
-const userNameErrorMsg = "inputError-UserName";
-const yearOfBirthErrorMsg = "inputError-YearOfBirth";
-const lastUserInList = "//table[@data-testid='table-Users']/tbody/tr[last()]";
-const userNameCell = "[data-testid='td-UserName']";
-const yearOfBirthCell = "[data-testid='td-YearOfBirth']";
-const genderCell = "[data-testid='td-Gender']";
+const GenderDropdownMenuByXPath = "//form/descendant::select[@data-testid='select-Gender']";
+const userNameFieldByXPath = "//form/descendant::input[@data-testid='input-UserName']";
+const yearOfBirthFieldByXPath = "//form/descendant::input[@data-testid='input-YearOfBirth']";
+const createBtnByTestId = "button-Create";
+const cancelBtnByTestId = "button-Cancel";
+const userNameErrorMsgByTestId = "inputError-UserName";
+const yearOfBirthErrorMsgByTestId = "inputError-YearOfBirth";
+const lastUserInListByXPath = "//table[@data-testid='table-Users']/tbody/tr[last()]";
+const userNameCellByCSS = "[data-testid='td-UserName']";
+const yearOfBirthCellByCSS = "[data-testid='td-YearOfBirth']";
+const genderCellByCSS = "[data-testid='td-Gender']";
 
 class AddUserPage extends BasePage {
   constructor(page: Page) {
@@ -19,43 +19,45 @@ class AddUserPage extends BasePage {
   }
 
   async setGender(gender: string) {
-    await this.selectOption(GenderDropdownMenu, gender);
+    await this.selectOption(GenderDropdownMenuByXPath, gender);
   }
 
   async setUserName(username: string, blur = false) {
-    await this.setValue(userNameField, username, blur);
+    await this.setValue(userNameFieldByXPath, username, blur);
   }
 
   async setYearOfBirth(yearOfBirth: number, blur = false) {
-    await this.setValue(yearOfBirthField, yearOfBirth.toString(), blur);
+    await this.setValue(yearOfBirthFieldByXPath, yearOfBirth.toString(), blur);
   }
 
   async clickCreateBtn() {
+    const createBtn = await this.getElementByTestID(createBtnByTestId);
     await this.clickElement(createBtn);
   }
 
   async clickCancelBtn() {
+    const cancelBtn = await this.getElementByTestID(cancelBtnByTestId);
     await this.clickElement(cancelBtn);
   }
 
   async getUserNameErrorMsg(): Promise<Locator> {
-    return await this.getElementByTestID(userNameErrorMsg);
+    return await this.getElementByTestID(userNameErrorMsgByTestId);
   }
 
   async getYearOfBirthErrorMsg(): Promise<Locator> {
-    return await this.getElementByTestID(yearOfBirthErrorMsg);
+    return await this.getElementByTestID(yearOfBirthErrorMsgByTestId);
   }
 
   async getLastuserNameInList(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInList, userNameCell)).innerText();
+    return await (await this.getNestedElement(lastUserInListByXPath, userNameCellByCSS)).innerText();
   }
 
   async getLastUserYearOfBirth(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInList, yearOfBirthCell)).innerText();
+    return await (await this.getNestedElement(lastUserInListByXPath, yearOfBirthCellByCSS)).innerText();
   }
 
   async getLastUserGender(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInList, genderCell)).innerText();
+    return await (await this.getNestedElement(lastUserInListByXPath, genderCellByCSS)).innerText();
   }
 
   async getCreatedUser(): Promise<{

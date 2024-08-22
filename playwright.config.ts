@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: "html",
   use: {
     baseURL: "https://traineeautomation.azurewebsites.net/",
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
 
