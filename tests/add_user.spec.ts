@@ -16,9 +16,9 @@ test.describe("Add User functional", () => {
     const addUserSteps = new AddUserSteps(page);
     const generator = new Generator();
 
-    const username = await generator.randomValidName();
-    const yearOfBirth = await generator.randomValidYearOfBirth();
-    const gender = "Male";
+    const username = generator.getName();
+    const yearOfBirth = generator.getYearOfBirth();
+    const gender = generator.getGender();
 
     try {
       await addUserSteps.addUser(gender, username, yearOfBirth);
@@ -45,8 +45,8 @@ test.describe("Add User functional", () => {
     const addUserPage = new AddUserPage(page);
     const generator = new Generator();
 
-    await addUserPage.setGender("Male");
-    await addUserPage.setUserName(await generator.randomInvalidName(), true);
+    await addUserPage.setGender(generator.getGender());
+    await addUserPage.setUserName(generator.getName(false), true);
 
     await expect(page).toHaveURL(`${baseURL}Forms/AddUser`);
     await expect(await addUserPage.getUserNameErrorMsg()).toHaveText("Name is too short");
@@ -56,9 +56,9 @@ test.describe("Add User functional", () => {
     const addUserPage = new AddUserPage(page);
     const generator = new Generator();
 
-    await addUserPage.setGender("Male");
-    await addUserPage.setUserName(await generator.randomValidName());
-    await addUserPage.setYearOfBirth(await generator.randomInvalidYearOfBirth(), true);
+    await addUserPage.setGender(generator.getGender());
+    await addUserPage.setUserName(generator.getName());
+    await addUserPage.setYearOfBirth(generator.getYearOfBirth(false), true);
 
     await expect(page).toHaveURL(`${baseURL}Forms/AddUser`);
     await expect(await addUserPage.getYearOfBirthErrorMsg()).toHaveText("Not valid Year of Birth is set");
@@ -69,9 +69,9 @@ test.describe("Add User functional", () => {
     const addUserSteps = new AddUserSteps(page);
     const generator = new Generator();
 
-    const username = await generator.randomValidName();
-    const yearOfBirth = await generator.randomValidYearOfBirth();
-    const gender = "Male";
+    const username = generator.getName();
+    const yearOfBirth = generator.getYearOfBirth();
+    const gender = generator.getGender();
 
     await addUserSteps.fillUserFields(gender, username, yearOfBirth);
 

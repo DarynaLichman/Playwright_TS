@@ -19,8 +19,12 @@ abstract class BasePage {
     return this.page.getByTestId(dataTestId);
   }
 
-  async getNestedElement(parent: string, child: string): Promise<Locator> {
-    return this.page.locator(parent).locator(child);
+  async getNestedElement(parent: string, ...children: string[]): Promise<Locator> {
+    let element = await this.getElement(parent);
+    for (const child of children) {
+      element = element.locator(child);
+    }
+    return element;
   }
 
   async clickElement(element: Locator) {
