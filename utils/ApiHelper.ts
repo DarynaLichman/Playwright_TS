@@ -24,23 +24,13 @@ class ApiHelper {
   }
 
   async getUserID(userDTO: UserDTO): Promise<string | null> {
-    try {
-      const users = await this.getUsers();
+    const users = await this.getUsers();
 
-      const user = users.find(
-        (user) => user.name === userDTO.getUsername() && user.yearOfBirth === userDTO.getYearOfBirth()
-      );
+    const user = users.find(
+      (user) => user.name === userDTO.getUsername() && user.yearOfBirth === userDTO.getYearOfBirth()
+    );
 
-      if (!user) {
-        throw new Error(
-          `User with name ${userDTO.getUsername()} and year of birth ${userDTO.getYearOfBirth()} not found.`
-        );
-      }
-      return user.id;
-    } catch (error) {
-      console.error("Error in getUserID:", error);
-      return null;
-    }
+    return user ? user.id : null;
   }
 
   async deleteUser(userDTO: UserDTO): Promise<void> {
