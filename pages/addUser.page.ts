@@ -8,10 +8,12 @@ const createBtnByTestId = "button-Create";
 const cancelBtnByTestId = "button-Cancel";
 const userNameErrorMsgByTestId = "inputError-UserName";
 const yearOfBirthErrorMsgByTestId = "inputError-YearOfBirth";
-const lastUserInListByXPath = "//table[@data-testid='table-Users']/tbody/tr[last()]";
 const userNameCellByCSS = "[data-testid='td-UserName']";
 const yearOfBirthCellByCSS = "[data-testid='td-YearOfBirth']";
 const genderCellByCSS = "[data-testid='td-Gender']";
+const createdUserInListByXpath = (name: string): string => {
+  return `//tr[td[@data-testid='td-UserName' and normalize-space(text())="${name}"]]`;
+};
 
 class AddUserPage extends BasePage {
   constructor(page: Page) {
@@ -22,12 +24,12 @@ class AddUserPage extends BasePage {
     await this.selectOption(GenderDropdownMenuByXPath, gender);
   }
 
-  async setUserName(username: string, blur = false) {
-    await this.setValue(userNameFieldByXPath, username, blur);
+  async setUserName(username: string) {
+    await this.setValue(userNameFieldByXPath, username);
   }
 
-  async setYearOfBirth(yearOfBirth: number, blur = false) {
-    await this.setValue(yearOfBirthFieldByXPath, yearOfBirth.toString(), blur);
+  async setYearOfBirth(yearOfBirth: number) {
+    await this.setValue(yearOfBirthFieldByXPath, yearOfBirth.toString());
   }
 
   async clickCreateBtn() {
@@ -48,26 +50,31 @@ class AddUserPage extends BasePage {
     return await this.getElementByTestID(yearOfBirthErrorMsgByTestId);
   }
 
-  async getLastuserNameInList(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInListByXPath, userNameCellByCSS)).innerText();
+  async getCreateduserNameInList(element: Locator): Promise<string> {
+    return await (await this.getNestedElement(element, userNameCellByCSS)).innerText();
   }
 
-  async getLastUserYearOfBirth(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInListByXPath, yearOfBirthCellByCSS)).innerText();
+  async getCreatedUserYearOfBirth(element: Locator): Promise<string> {
+    return await (await this.getNestedElement(element, yearOfBirthCellByCSS)).innerText();
   }
 
-  async getLastUserGender(): Promise<string> {
-    return await (await this.getNestedElement(lastUserInListByXPath, genderCellByCSS)).innerText();
+  async getCreatedUserGender(element: Locator): Promise<string> {
+    return await (await this.getNestedElement(element, genderCellByCSS)).innerText();
   }
 
-  async getCreatedUser(): Promise<{
-    username: string;
-    yearOfBirth: number;
-    gender: string;
-  }> {
-    const username = await this.getLastuserNameInList();
-    const yearOfBirth = parseInt(await this.getLastUserYearOfBirth());
-    const gender = await this.getLastUserGender();
+  async getCreatedUser(name: string): Promise<
+    | {
+        username: string;
+        yearOfBirth: number;
+        gender: string;
+      }
+    | undefined
+  > {
+    const userRow = await this.getElement(createdUserInListByXpath(name));
+
+    const username = await this.getCreateduserNameInList(userRow);
+    const yearOfBirth = parseInt(await this.getCreatedUserYearOfBirth(userRow), 10);
+    const gender = await this.getCreatedUserGender(userRow);
 
     return { username, yearOfBirth, gender };
   }

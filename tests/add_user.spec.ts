@@ -3,7 +3,8 @@ import { AddUserPage } from "../pages/addUser.page";
 import ApiHelper from "../utils/ApiHelper";
 import AddUserSteps from "../utils/addUserSteps";
 import Generator from "../utils/generator";
-import UserDTO from "../utils/UserDTO";
+
+const generator = new Generator();
 
 test.describe("Add User functional", () => {
   test.beforeEach(async ({ page }) => {
@@ -15,26 +16,17 @@ test.describe("Add User functional", () => {
     const addUserPage = new AddUserPage(page);
     const apiHelper = new ApiHelper(request, baseURL!);
     const addUserSteps = new AddUserSteps(page);
-    const generator = new Generator();
 
-    const gender = generator.getGender();
-    const username = generator.getName();
-    const yearOfBirth = generator.getYearOfBirth();
-
-    const user = new UserDTO(gender, username, yearOfBirth);
+    const user = generator.generateRandomUser();
 
     try {
       await addUserSteps.addUser(user);
 
       await expect(page).toHaveURL(baseURL!);
-      const addedUser = await addUserPage.getCreatedUser();
-      expect(addedUser).toEqual({
-        username: user.getUsername(),
-        yearOfBirth: user.getYearOfBirth(),
-        gender: user.getGender(),
-      });
+      const addedUser = await addUserPage.getCreatedUser(user.getUsername());
+      expect(addedUser).toEqual(user);
     } finally {
-      await apiHelper.deleteUser(user.getUsername(), user.getYearOfBirth()!);
+      await apiHelper.deleteUser(user);
     }
   });
 
@@ -50,12 +42,11 @@ test.describe("Add User functional", () => {
 
   test("Check user with invalid username can’t be added", async ({ page, baseURL }) => {
     const addUserPage = new AddUserPage(page);
-    const generator = new Generator();
+    const addUserSteps = new AddUserSteps(page);
 
-    const user = new UserDTO(generator.getGender(), generator.getName(false));
+    const user = generator.generateRandomUser(false);
 
-    await addUserPage.setGender(user.getGender());
-    await addUserPage.setUserName(user.getUsername(), true);
+    await addUserSteps.fillUserFields(user);
 
     await expect(page).toHaveURL(`${baseURL}Forms/AddUser`);
     await expect(await addUserPage.getUserNameErrorMsg()).toHaveText("Name is too short");
@@ -63,13 +54,11 @@ test.describe("Add User functional", () => {
 
   test("Check user with invalid year of birth can’t be added", async ({ page, baseURL }) => {
     const addUserPage = new AddUserPage(page);
-    const generator = new Generator();
+    const addUserSteps = new AddUserSteps(page);
 
-    const user = new UserDTO(generator.getGender(), generator.getName(), generator.getYearOfBirth(false));
+    const user = generator.generateRandomUser(true, false);
 
-    await addUserPage.setGender(user.getGender());
-    await addUserPage.setUserName(user.getUsername());
-    await addUserPage.setYearOfBirth(user.getYearOfBirth()!, true);
+    await addUserSteps.fillUserFields(user);
 
     await expect(page).toHaveURL(`${baseURL}Forms/AddUser`);
     await expect(await addUserPage.getYearOfBirthErrorMsg()).toHaveText("Not valid Year of Birth is set");
@@ -78,9 +67,8 @@ test.describe("Add User functional", () => {
   test("Cancel adding user after filling all fields", async ({ page, baseURL }) => {
     const addUserPage = new AddUserPage(page);
     const addUserSteps = new AddUserSteps(page);
-    const generator = new Generator();
 
-    const user = new UserDTO(generator.getGender(), generator.getName(), generator.getYearOfBirth());
+    const user = generator.generateRandomUser();
 
     await addUserSteps.fillUserFields(user);
 

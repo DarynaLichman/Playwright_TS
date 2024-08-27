@@ -19,8 +19,8 @@ abstract class BasePage {
     return this.page.getByTestId(dataTestId);
   }
 
-  async getNestedElement(parent: string, ...children: string[]): Promise<Locator> {
-    let element = await this.getElement(parent);
+  async getNestedElement(parent: Locator, ...children: string[]): Promise<Locator> {
+    let element = parent;
     for (const child of children) {
       element = element.locator(child);
     }
@@ -31,11 +31,9 @@ abstract class BasePage {
     await element.click();
   }
 
-  async setValue(element: string, value: string, blur = false) {
+  async setValue(element: string, value: string) {
     await (await this.getElement(element)).fill(value);
-    if (blur) {
-      this.blur(element);
-    }
+    this.blur(element);
   }
 
   async blur(element: string) {

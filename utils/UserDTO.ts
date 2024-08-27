@@ -1,9 +1,9 @@
 class UserDTO {
   private gender: string;
   private username: string;
-  private yearOfBirth?: number | undefined;
+  private yearOfBirth: number;
 
-  constructor(gender: string, username: string, yearOfBirth?: number) {
+  constructor(gender: string, username: string, yearOfBirth: number) {
     this.gender = gender;
     this.username = username;
     this.yearOfBirth = yearOfBirth;
@@ -17,7 +17,7 @@ class UserDTO {
     return this.username;
   }
 
-  getYearOfBirth(): number | undefined {
+  getYearOfBirth(): number {
     return this.yearOfBirth;
   }
 }

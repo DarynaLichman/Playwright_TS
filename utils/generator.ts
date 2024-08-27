@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import UserDTO from "./UserDTO";
 
 class Generator {
   getName(valid: boolean = true) {
@@ -21,6 +22,13 @@ class Generator {
     const genders = ["Male", "Female"];
     const randomIndex = Math.floor(Math.random() * genders.length);
     return genders[randomIndex];
+  }
+
+  generateRandomUser(isValidName: boolean = true, isValidYearOfBirth: boolean = true): UserDTO {
+    const gender = this.getGender();
+    const username = this.getName(isValidName);
+    const yearOfBirth = this.getYearOfBirth(isValidYearOfBirth);
+    return new UserDTO(gender, username, yearOfBirth);
   }
 }
 

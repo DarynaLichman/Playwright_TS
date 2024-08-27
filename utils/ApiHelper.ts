@@ -1,4 +1,5 @@
 import { APIRequestContext } from "@playwright/test";
+import UserDTO from "./UserDTO";
 
 class ApiHelper {
   private request: APIRequestContext;
@@ -22,16 +23,19 @@ class ApiHelper {
     return await users.json();
   }
 
-  async getUserID(username: string, yearOfBirth: number): Promise<string | null> {
+  async getUserID(userDTO: UserDTO): Promise<string | null> {
     try {
       const users = await this.getUsers();
 
-      const user = users.find((user) => user.name === username && user.yearOfBirth === yearOfBirth);
+      const user = users.find(
+        (user) => user.name === userDTO.getUsername() && user.yearOfBirth === userDTO.getYearOfBirth()
+      );
 
       if (!user) {
-        throw new Error(`User with name ${username} and year of birth ${yearOfBirth} not found.`);
+        throw new Error(
+          `User with name ${userDTO.getUsername()} and year of birth ${userDTO.getYearOfBirth()} not found.`
+        );
       }
-
       return user.id;
     } catch (error) {
       console.error("Error in getUserID:", error);
@@ -39,8 +43,8 @@ class ApiHelper {
     }
   }
 
-  async deleteUser(username: string, yearOfBirth: number): Promise<void> {
-    const id = await this.getUserID(username, yearOfBirth);
+  async deleteUser(userDTO: UserDTO): Promise<void> {
+    const id = await this.getUserID(userDTO);
     await this.request.delete(`${this.baseURL}/api/User/${id}`);
   }
 }
