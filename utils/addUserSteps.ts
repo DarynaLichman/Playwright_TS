@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import UserDTO from "./UserDTO";
 import { AddUserPage } from "../pages/addUser.page";
 
 class AddUserSteps {
@@ -8,14 +9,14 @@ class AddUserSteps {
     this.addUserPage = new AddUserPage(page);
   }
 
-  async fillUserFields(gender: string, username: string, yearOfBirth: number) {
-    await this.addUserPage.setUserName(username);
-    await this.addUserPage.setYearOfBirth(yearOfBirth);
-    await this.addUserPage.setGender(gender);
+  async fillUserFields(user: UserDTO) {
+    await this.addUserPage.setUserName(user.getUsername());
+    await this.addUserPage.setYearOfBirth(user.getYearOfBirth()!);
+    await this.addUserPage.setGender(user.getGender());
   }
 
-  async addUser(gender: string, username: string, yearOfBirth: number) {
-    await this.fillUserFields(gender, username, yearOfBirth);
+  async addUser(user: UserDTO) {
+    await this.fillUserFields(user);
     await this.addUserPage.clickCreateBtn();
   }
 }
