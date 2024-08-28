@@ -20,6 +20,12 @@ class UserDTO {
   getYearOfBirth(): number {
     return this.yearOfBirth;
   }
+
+  getGenderNumber(): number {
+    const genders = ["Male", "Female"];
+    const gen = this.getGender();
+    return genders.indexOf(gen) + 1;
+  }
 }
 
 export default UserDTO;
