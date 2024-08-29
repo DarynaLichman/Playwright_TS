@@ -21,10 +21,14 @@ class UserDTO {
     return this.yearOfBirth;
   }
 
-  getGenderNumber(): number {
-    const genders = ["Male", "Female"];
-    const gen = this.getGender();
-    return genders.indexOf(gen) + 1;
+  getGenderNumber(): number | undefined {
+    const genderMap = new Map<string, number>([
+      ["Male", 0],
+      ["Female", 1],
+    ]);
+    let index = genderMap.get(this.getGender());
+
+    return index;
   }
 }
 

@@ -15,13 +15,6 @@ test.describe("Add User functional", () => {
     await addUserPage.goto("Forms/AddUser");
   });
 
-  test.afterEach(async ({ request, baseURL }) => {
-    if (user) {
-      const apiHelper = new ApiHelper(request, baseURL!);
-      await apiHelper.deleteUser(user);
-    }
-  });
-
   test("Add User with valid data", async ({ page, baseURL }) => {
     const addUserPage = new AddUserPage(page);
     const addUserSteps = new AddUserSteps(page);
@@ -80,5 +73,12 @@ test.describe("Add User functional", () => {
     await addUserPage.clickCancelBtn();
 
     await expect(page).toHaveURL(baseURL!);
+  });
+
+  test.afterEach(async ({ request }) => {
+    if (user) {
+      const apiHelper = new ApiHelper(request);
+      await apiHelper.deleteUser(user);
+    }
   });
 });

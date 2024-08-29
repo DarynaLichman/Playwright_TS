@@ -30,6 +30,14 @@ class Generator {
     const yearOfBirth = this.getYearOfBirth(isValidYearOfBirth);
     return new UserDTO(gender, username, yearOfBirth);
   }
+
+  getTodayDate(): string {
+    return new Date().toISOString().split("T")[0];
+  }
+
+  getUuid(): RegExp {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  }
 }
 
 export default Generator;

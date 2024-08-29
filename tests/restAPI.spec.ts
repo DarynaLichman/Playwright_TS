@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import Generator from "../utils/generator";
 import ApiHelper from "../utils/ApiHelper";
-import { AddUserPage } from "../pages/addUser.page";
 import UserDTO from "../utils/UserDTO";
 
 const generator = new Generator();
@@ -9,16 +8,8 @@ const generator = new Generator();
 test.describe("API requests", () => {
   let user: UserDTO | undefined;
 
-  test.afterEach(async ({ request, baseURL }) => {
-    if (user) {
-      const apiHelper = new ApiHelper(request, baseURL!);
-      await apiHelper.deleteUser(user);
-    }
-  });
-
-  test("create user", async ({ page, request, baseURL }) => {
-    const addUserPage = new AddUserPage(page);
-    const apiHelper = new ApiHelper(request, baseURL!);
+  test("POST user", async ({ request }) => {
+    const apiHelper = new ApiHelper(request);
 
     user = generator.generateRandomUser();
 
@@ -26,31 +17,43 @@ test.describe("API requests", () => {
 
     expect(res.status()).toEqual(200);
 
-    await addUserPage.goto("");
+    const responseBody = await res.json();
 
-    const addedUser = await addUserPage.getCreatedUser(user.getUsername());
-    expect(addedUser).toEqual(user);
+    const uuidRegex = generator.getUuid();
+    const resDate = responseBody.created.split("T")[0];
+
+    expect(responseBody.id).toMatch(uuidRegex);
+    expect(responseBody.name).toEqual(user.getUsername());
+    expect(responseBody.yearOfBirth).toEqual(user.getYearOfBirth());
+    expect(responseBody.gender).toEqual(user.getGenderNumber());
+    expect(resDate).toBe(generator.getTodayDate());
   });
 
-  test("get user", async ({ request, baseURL }) => {
-    const apiHelper = new ApiHelper(request, baseURL!);
+  test("GET user", async ({ request }) => {
+    const apiHelper = new ApiHelper(request);
 
     user = generator.generateRandomUser();
 
     await apiHelper.createUser(user);
 
     const res = await apiHelper.getUser(user);
-    const responseBody = await res.json();
 
     expect(res.status()).toEqual(200);
 
+    const responseBody = await res.json();
+
+    const uuidRegex = generator.getUuid();
+    const resDate = responseBody.created.split("T")[0];
+
+    expect(responseBody.id).toMatch(uuidRegex);
     expect(responseBody.name).toEqual(user.getUsername());
     expect(responseBody.yearOfBirth).toEqual(user.getYearOfBirth());
+    expect(responseBody.gender).toEqual(user.getGenderNumber());
+    expect(resDate).toBe(generator.getTodayDate());
   });
 
-  test("update user", async ({ page, request, baseURL }) => {
-    const addUserPage = new AddUserPage(page);
-    const apiHelper = new ApiHelper(request, baseURL!);
+  test("PUT user", async ({ request }) => {
+    const apiHelper = new ApiHelper(request);
 
     user = generator.generateRandomUser();
     await apiHelper.createUser(user);
@@ -59,15 +62,10 @@ test.describe("API requests", () => {
     const res = await apiHelper.updateUser(newUser);
 
     expect(res.status()).toEqual(200);
-
-    await addUserPage.goto("");
-
-    const addedUser = await addUserPage.getCreatedUser(user.getUsername());
-    expect(addedUser).toEqual(user);
   });
 
-  test("delete user", async ({ request, baseURL }) => {
-    const apiHelper = new ApiHelper(request, baseURL!);
+  test("DELETE user", async ({ request }) => {
+    const apiHelper = new ApiHelper(request);
 
     user = generator.generateRandomUser();
 
@@ -76,5 +74,12 @@ test.describe("API requests", () => {
     const res = await apiHelper.deleteUser(user);
 
     expect(res.status()).toEqual(200);
+  });
+
+  test.afterEach(async ({ request }) => {
+    if (user) {
+      const apiHelper = new ApiHelper(request);
+      await apiHelper.deleteUser(user);
+    }
   });
 });
