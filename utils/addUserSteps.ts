@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import UserDTO from "./UserDTO";
-import { AddUserPage } from "../pages/addUser.page";
+import { AddUserPage } from "../pages/AddUserPage";
 
 class AddUserSteps {
   private addUserPage: AddUserPage;

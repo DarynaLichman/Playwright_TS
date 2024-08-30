@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./page";
+import { BasePage } from "./BasePage";
 
 const GenderDropdownMenuByXPath = "//form/descendant::select[@data-testid='select-Gender']";
 const userNameFieldByXPath = "//form/descendant::input[@data-testid='input-UserName']";

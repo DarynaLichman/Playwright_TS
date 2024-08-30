@@ -1,4 +1,4 @@
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, APIResponse } from "@playwright/test";
 import UserDTO from "./UserDTO";
 
 class ApiHelper {
@@ -18,7 +18,7 @@ class ApiHelper {
     }[]
   > {
     const users = await this.request.get(`/api/User`);
-    return await users.json();
+    return users.json();
   }
 
   async getUserID(userDTO: UserDTO): Promise<string | null> {
@@ -31,7 +31,7 @@ class ApiHelper {
     return user ? user.id : null;
   }
 
-  async createUser(userDTO: UserDTO) {
+  async createUser(userDTO: UserDTO): Promise<APIResponse> {
     const response = await this.request.post(`/api/User`, {
       data: {
         name: userDTO.getUsername(),
@@ -42,19 +42,19 @@ class ApiHelper {
     return response;
   }
 
-  async getUser(userDTO: UserDTO) {
+  async getUser(userDTO: UserDTO): Promise<APIResponse> {
     const id = await this.getUserID(userDTO);
     const response = await this.request.get(`/api/User/${id}`);
     return response;
   }
 
-  async deleteUser(userDTO: UserDTO) {
+  async deleteUser(userDTO: UserDTO): Promise<APIResponse> {
     const id = await this.getUserID(userDTO);
     const response = await this.request.delete(`/api/User/${id}`);
     return response;
   }
 
-  async updateUser(userDTO: UserDTO) {
+  async updateUser(userDTO: UserDTO): Promise<APIResponse> {
     const userID = await this.getUserID(userDTO);
     const response = await this.request.put(`/api/User/${userID}`, {
       data: {

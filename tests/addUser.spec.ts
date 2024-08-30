@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { AddUserPage } from "../pages/addUser.page";
+import { AddUserPage } from "../pages/AddUserPage";
 import ApiHelper from "../utils/ApiHelper";
-import AddUserSteps from "../utils/addUserSteps";
-import Generator from "../utils/generator";
+import AddUserSteps from "../utils/AddUserSteps";
+import Generator from "../utils/Generator";
 import UserDTO from "../utils/UserDTO";
 
 const generator = new Generator();

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import Generator from "../utils/generator";
+import Generator from "../utils/Generator";
 import ApiHelper from "../utils/ApiHelper";
 import UserDTO from "../utils/UserDTO";
 

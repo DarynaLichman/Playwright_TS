@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import UserDTO from "./UserDTO";
 
 class Generator {
-  getName(valid: boolean = true) {
+  getName(valid: boolean = true): string {
     if (valid) {
       return faker.person.firstName();
     } else {
@@ -10,7 +10,7 @@ class Generator {
     }
   }
 
-  getYearOfBirth(valid: boolean = true) {
+  getYearOfBirth(valid: boolean = true): number {
     if (valid) {
       return faker.number.int({ min: 1900, max: 2005 });
     } else {
@@ -18,7 +18,7 @@ class Generator {
     }
   }
 
-  getGender() {
+  getGender(): string {
     const genders = ["Male", "Female"];
     const randomIndex = Math.floor(Math.random() * genders.length);
     return genders[randomIndex];
