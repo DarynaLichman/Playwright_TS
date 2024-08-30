@@ -1,13 +1,20 @@
 {
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@faker-js/faker": "^8.4.1",
+    "@playwright/test": "^1.46.0",
     "@types/eslint__js": "^8.42.3",
     "@types/eslint-config-prettier": "^6.11.3",
+    "@types/node": "^22.3.0",
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
     "typescript-eslint": "^8.1.0"
+  },
+  "scripts": {
+    "tests": "npx playwright test"
   }
 }
