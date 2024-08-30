@@ -8,7 +8,7 @@ const generator = new Generator();
 test.describe("API requests", () => {
   let user: UserDTO | undefined;
 
-  test("POST user", async ({ request }) => {
+  test.only("POST user", async ({ request }) => {
     const apiHelper = new ApiHelper(request);
 
     user = generator.generateRandomUser();

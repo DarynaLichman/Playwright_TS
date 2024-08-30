@@ -23,8 +23,8 @@ class UserDTO {
 
   getGenderNumber(): number | undefined {
     const genderMap = new Map<string, number>([
-      ["Male", 0],
-      ["Female", 1],
+      ["Male", 1],
+      ["Female", 2],
     ]);
     let index = genderMap.get(this.getGender());
 
