@@ -50,7 +50,7 @@ class AddUserPage extends BasePage {
     return await this.getElementByTestID(yearOfBirthErrorMsgByTestId);
   }
 
-  async getCreateduserNameInList(element: Locator): Promise<string> {
+  async getCreatedUserNameInList(element: Locator): Promise<string> {
     return await (await this.getNestedElement(element, userNameCellByCSS)).innerText();
   }
 
@@ -72,7 +72,7 @@ class AddUserPage extends BasePage {
   > {
     const userRow = await this.getElement(createdUserInListByXpath(name));
 
-    const username = await this.getCreateduserNameInList(userRow);
+    const username = await this.getCreatedUserNameInList(userRow);
     const yearOfBirth = parseInt(await this.getCreatedUserYearOfBirth(userRow), 10);
     const gender = await this.getCreatedUserGender(userRow);
 

@@ -11,7 +11,7 @@ class AddUserSteps {
 
   async fillUserFields(user: UserDTO) {
     await this.addUserPage.setUserName(user.getUsername());
-    await this.addUserPage.setYearOfBirth(user.getYearOfBirth()!);
+    await this.addUserPage.setYearOfBirth(user.getYearOfBirth());
     await this.addUserPage.setGender(user.getGender());
   }
 

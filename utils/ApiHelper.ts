@@ -17,7 +17,7 @@ class ApiHelper {
       created: Date;
     }[]
   > {
-    const users = await this.request.get(`/api/User`);
+    const users = await this.request.get(`api/User`);
     return users.json();
   }
 
@@ -32,7 +32,7 @@ class ApiHelper {
   }
 
   async createUser(userDTO: UserDTO): Promise<APIResponse> {
-    const response = await this.request.post(`/api/User`, {
+    const response = await this.request.post(`api/User`, {
       data: {
         name: userDTO.getUsername(),
         yearOfBirth: userDTO.getYearOfBirth(),
@@ -44,19 +44,19 @@ class ApiHelper {
 
   async getUser(userDTO: UserDTO): Promise<APIResponse> {
     const id = await this.getUserID(userDTO);
-    const response = await this.request.get(`/api/User/${id}`);
+    const response = await this.request.get(`api/User/${id}`);
     return response;
   }
 
   async deleteUser(userDTO: UserDTO): Promise<APIResponse> {
     const id = await this.getUserID(userDTO);
-    const response = await this.request.delete(`/api/User/${id}`);
+    const response = await this.request.delete(`api/User/${id}`);
     return response;
   }
 
   async updateUser(userDTO: UserDTO): Promise<APIResponse> {
     const userID = await this.getUserID(userDTO);
-    const response = await this.request.put(`/api/User/${userID}`, {
+    const response = await this.request.put(`api/User/${userID}`, {
       data: {
         name: userDTO.getUsername(),
         yearOfBirth: userDTO.getYearOfBirth(),

@@ -4,13 +4,16 @@ import ApiHelper from "../utils/ApiHelper";
 import UserDTO from "../utils/UserDTO";
 
 const generator = new Generator();
+let apiHelper: ApiHelper;
 
 test.describe("API requests", () => {
   let user: UserDTO | undefined;
 
-  test("POST user", async ({ request }) => {
-    const apiHelper = new ApiHelper(request);
+  test.beforeEach(async ({ request }) => {
+    apiHelper = new ApiHelper(request);
+  });
 
+  test("POST user", async () => {
     user = generator.generateRandomUser();
 
     const res = await apiHelper.createUser(user);
@@ -29,9 +32,7 @@ test.describe("API requests", () => {
     expect(resDate).toBe(generator.getTodayDate());
   });
 
-  test("GET user", async ({ request }) => {
-    const apiHelper = new ApiHelper(request);
-
+  test("GET user", async () => {
     user = generator.generateRandomUser();
 
     await apiHelper.createUser(user);
@@ -52,9 +53,7 @@ test.describe("API requests", () => {
     expect(resDate).toBe(generator.getTodayDate());
   });
 
-  test("PUT user", async ({ request }) => {
-    const apiHelper = new ApiHelper(request);
-
+  test("PUT user", async () => {
     user = generator.generateRandomUser();
     await apiHelper.createUser(user);
 
@@ -64,9 +63,7 @@ test.describe("API requests", () => {
     expect(res.status()).toEqual(200);
   });
 
-  test("DELETE user", async ({ request }) => {
-    const apiHelper = new ApiHelper(request);
-
+  test("DELETE user", async () => {
     user = generator.generateRandomUser();
 
     await apiHelper.createUser(user);
@@ -76,9 +73,8 @@ test.describe("API requests", () => {
     expect(res.status()).toEqual(200);
   });
 
-  test.afterEach(async ({ request }) => {
+  test.afterEach(async () => {
     if (user) {
-      const apiHelper = new ApiHelper(request);
       await apiHelper.deleteUser(user);
     }
   });
